@@ -1,5 +1,14 @@
 cmake_minimum_required(VERSION 3.1)
 
+set(vcpkg "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+if(NOT CMAKE_TOOLCHAIN_FILE AND EXISTS "${vcpkg}")
+    set(CMAKE_TOOLCHAIN_FILE "${vcpkg}"
+        CACHE FILEPATH "CMake toolchain file")
+    message(STATUS "vcpkg toolchain found: ${CMAKE_TOOLCHAIN_FILE}")
+endif()
+
+
+
 project(cis565_path_tracer)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -23,7 +32,7 @@ endif()
 ########################################
 # CUDA Setup
 ########################################
-find_package(CUDA 10 REQUIRED)
+find_package(CUDA 12 REQUIRED)
 include(${CMAKE_MODULE_PATH}/CUDAComputesList.cmake)
 
 list(APPEND CUDA_NVCC_FLAGS ${CUDA_GENERATE_CODE})
@@ -59,8 +68,10 @@ else(UNIX)
 endif(UNIX)
 
 set(GLM_ROOT_DIR "external")
+# include_directories(${GLM_INCLUDE_DIRS})
 find_package(GLM REQUIRED)
-include_directories(${GLM_INCLUDE_DIRS})
+include_directories(external/include/)
+include_directories(src/tinyobjloader)
 
 set(headers
     src/main.h

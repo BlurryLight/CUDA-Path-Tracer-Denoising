@@ -3,7 +3,7 @@
 #include "glm/glm.hpp"
 #include <vector>
 
-extern struct Ray {
+struct Ray {
     glm::vec3 origin;
     glm::vec3 direction;
 };
@@ -33,7 +33,7 @@ public:
 		return (i == 0) ? minCorner : maxCorner;
 	}
 
-	BoundingBox& operator || (BoundingBox& b2) {
+	BoundingBox operator || (BoundingBox& b2) {
 		if (this->minCorner.x == 0.f && this->maxCorner.x == 0.f &&
 			this->minCorner.y == 0.f && this->maxCorner.y == 0.f &&
 			this->minCorner.z == 0.f && this->maxCorner.z == 0.f) {
@@ -49,7 +49,7 @@ public:
 		}
 	}
 
-	BoundingBox& operator || (const glm::vec3& p) {
+	BoundingBox operator || (const glm::vec3& p) {
 		return BoundingBox(glm::vec3(glm::min(this->minCorner.x, p.x),
 									 glm::min(this->minCorner.y, p.y),
 									 glm::min(this->minCorner.z, p.z)),
